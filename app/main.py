@@ -41,9 +41,9 @@ def shop_trip() -> Any:
         cheapest_total_cost = None
 
         for shop in shops:
-            result = shop.total_products_costs(customer.product_cart)
-            result1 = customer.trip_cost(shop, fuel_price)
-            total_cost = result + result1
+            total_products_cost = shop.total_products_costs(customer.product_cart)
+            total_fuel_cost = customer.trip_cost(shop, fuel_price)
+            total_cost = total_products_cost + total_fuel_cost
             print(f"{customer.name}'s trip to the {shop.name}"
                   f" costs {total_cost:.2f}")
 
@@ -62,7 +62,7 @@ def shop_trip() -> Any:
             customer.go_to(home_location)
             money_after_shopping = round(
                 customer.money - cheapest_trip, 2)
-            print(f"{customer.name} now has {money_after_shopping} dollars\n")
+            print(f"{customer.name} now has {money_after_shopping:.2f} dollars\n")
 
         print(f"{customer.name} doesn't have enough money"
               f" to make a purchase in any shop")
