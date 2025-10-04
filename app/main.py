@@ -36,8 +36,9 @@ def shop_trip() -> Any:
 
     for customer in customers:
         print(f"{customer.name} has {customer.money} dollars")
-        customer.min_products_cost = float("inf")
+        customer.best_total_cost = float("inf")
         choose_shop = None
+        cheapest_total_cost = None
 
         for shop in shops:
             result = shop.total_products_costs(customer.product_cart)
@@ -46,22 +47,22 @@ def shop_trip() -> Any:
             print(f"{customer.name}'s trip to the {shop.name}"
                   f" costs {total_cost:.2f}")
 
-            if total_cost < customer.min_products_cost:
-                customer.min_products_cost = result
+            if total_cost < customer.best_total_cost:
+                customer.best_total_cost = total_cost
                 customer.best_shop = shop.name
                 choose_shop = shop
-        cheapest_trip = customer.trip_cost(choose_shop, fuel_price) + customer.min_products_cost
+                cheapest_total_cost = total_cost
+
+        cheapest_trip = (customer.trip_cost(choose_shop, fuel_price)
+                         + cheapest_total_cost)
         if choose_shop and customer.can_afford(choose_shop, fuel_price):
-            home_location = customer.location
+            home_location = list(customer.location)
             customer.go_to(choose_shop.location)
             choose_shop.print_receipt(customer.name, customer.product_cart)
             customer.go_to(home_location)
             money_after_shopping = round(
                 customer.money - cheapest_trip, 2)
-            print(f"{customer.name} now has {money_after_shopping}\n")
+            print(f"{customer.name} now has {money_after_shopping} dollars\n")
 
-        if customer.money < cheapest_trip:
-            print(f"{customer.name} doesn't have enough money"
-                  f" to make a purchase in any shop")
-
-shop_trip()
+        print(f"{customer.name} doesn't have enough money"
+              f" to make a purchase in any shop")
