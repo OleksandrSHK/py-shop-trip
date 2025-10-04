@@ -37,28 +37,31 @@ def shop_trip() -> Any:
     for customer in customers:
         print(f"{customer.name} has {customer.money} dollars")
         customer.min_products_cost = float("inf")
+        choose_shop = None
 
         for shop in shops:
             result = shop.total_products_costs(customer.product_cart)
             result1 = customer.trip_cost(shop, fuel_price)
+            total_cost = result + result1
             print(f"{customer.name}'s trip to the {shop.name}"
-                  f" costs {result + result1}")
-            if result < customer.min_products_cost:
+                  f" costs {total_cost:.2f}")
+
+            if total_cost < customer.min_products_cost:
                 customer.min_products_cost = result
                 customer.best_shop = shop.name
+                choose_shop = shop
+        cheapest_trip = customer.trip_cost(choose_shop, fuel_price) + customer.min_products_cost
+        if choose_shop and customer.can_afford(choose_shop, fuel_price):
+            home_location = customer.location
+            customer.go_to(choose_shop.location)
+            choose_shop.print_receipt(customer.name, customer.product_cart)
+            customer.go_to(home_location)
+            money_after_shopping = round(
+                customer.money - cheapest_trip, 2)
+            print(f"{customer.name} now has {money_after_shopping}\n")
 
-        if customer.can_afford(shop, fuel_price):
-            customer.go_to(shop.location)
-            for shop in shops:
-                if shop.name == customer.best_shop:
-                    shop.print_receipt(customer.name, customer.product_cart)
-
-                    customer.go_to(customer.location)
-                    money_after_shopping = round(
-                        customer.money - (customer.trip_cost(shop, fuel_price)
-                                          + customer.min_products_cost), 2)
-                    customer.trip_cost(shop, fuel_price)
-                    print(f"{customer.name} now has {money_after_shopping}\n")
-        if customer.money < customer.min_products_cost:
+        if customer.money < cheapest_trip:
             print(f"{customer.name} doesn't have enough money"
                   f" to make a purchase in any shop")
+
+shop_trip()
