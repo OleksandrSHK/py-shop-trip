@@ -1,3 +1,4 @@
+import os
 from typing import Any
 from app.utils.io import read_config
 from app.customer import Customer
@@ -6,7 +7,8 @@ from app.car import Car
 
 
 def shop_trip() -> Any:
-    config = read_config("config.json")
+    path = os.path.join(os.path.dirname(__file__), "config.json")
+    config = read_config(path)
 
     fuel_price = config["FUEL_PRICE"]
     customers_data = config["customers"]
@@ -65,6 +67,6 @@ def shop_trip() -> Any:
                 customer.money - cheapest_trip, 2)
             print(f"{customer.name} now has"
                   f" {money_after_shopping:.2f} dollars\n")
-
-        print(f"{customer.name} doesn't have enough money"
-              f" to make a purchase in any shop")
+        else:
+            print(f"{customer.name} doesn't have enough money"
+                  f" to make a purchase in any shop")
