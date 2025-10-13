@@ -56,8 +56,9 @@ def shop_trip() -> Any:
                 choose_shop = shop
                 cheapest_total_cost = total_cost
 
-        cheapest_trip = (customer.trip_cost(choose_shop, fuel_price)
-                         + cheapest_total_cost)
+        # cheapest_trip = (customer.trip_cost(choose_shop, fuel_price)
+        #                  + cheapest_total_cost)
+        cheapest_trip = cheapest_total_cost
         if choose_shop and customer.can_afford(choose_shop, fuel_price):
             home_location = list(customer.location)
             customer.go_to(choose_shop.location)
@@ -66,7 +67,9 @@ def shop_trip() -> Any:
             money_after_shopping = round(
                 customer.money - cheapest_trip, 2)
             print(f"{customer.name} now has"
-                  f" {money_after_shopping:.2f} dollars\n")
+                  f" {money_after_shopping} dollars\n")
         else:
             print(f"{customer.name} doesn't have enough money"
                   f" to make a purchase in any shop")
+
+shop_trip()

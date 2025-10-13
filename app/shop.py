@@ -16,7 +16,7 @@ class Shop:
 
     def print_receipt(self, name: str, product_cart: dict) -> None:
         time_now = datetime.datetime.now()
-        time_now = time_now.strftime("%Y/%m/%d %H:%M:%S")
+        time_now = time_now.strftime("%d/%m/%Y %H:%M:%S")
         receipt = ""
         total_cost = 0
         for key, value in product_cart.items():
