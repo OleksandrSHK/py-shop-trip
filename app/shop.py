@@ -21,8 +21,11 @@ class Shop:
         total_cost = 0
         for key, value in product_cart.items():
             if key in self.products:
+                cost = float(value * self.products[key])
+                formatted_cost = f"{int(cost)}" if cost.is_integer()\
+                    else f"{cost:.1f}"
                 result = (f"{value} {key}s for "
-                          f"{value * self.products[key]} dollars\n")
+                          f"{formatted_cost} dollars\n")
                 receipt += result
                 total_cost += value * self.products[key]
         receipt += f"Total cost is {total_cost} dollars\n"
